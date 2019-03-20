@@ -20,6 +20,10 @@ class extractor(ExtractorBlog):
         self.toMarkdown()
         return self.body_md
 
+    @property
+    def getBodyHtml(self):
+        return self.body_html
+
 
 if __name__ == '__main__':
     ua_headers = {
