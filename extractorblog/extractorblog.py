@@ -10,9 +10,10 @@ from . import tomd
 
 class ExtractorBlog:
     def __init__(self):
-        self.html = None
+        self.body_html = None
         self.title = None
-
+        self.html = None
+        self.body_md = None
 
     def filterHtml(self, html):
         filter_map = {
@@ -63,7 +64,6 @@ class ExtractorBlog:
         s = re_h.sub('', s)
         s = re_comment.sub('', s)
         s = re.sub('\\t', '', s)
-        # s = re.sub(' ', '', s)
         s = re_space.sub(' ', s)
         s = self.replaceCharEntity(s)
         return s
@@ -102,16 +102,6 @@ class ExtractorBlog:
             text = _re.sub('src="' + self.urlJoin(article_url, '\g<1>') + '"', text)
         return text
 
-    def fixMd(self, md):
-        # 去除知乎图片生成md时产生重复地址
-        md_split = md.split('\n')
-        fix_md_str = []
-        for i in range(len(md_split)):
-            if i < len(md_split) - 2 and md_split[i] == md_split[i + 2] and md_split[i] and '```' not in md_split[i]:
-                continue
-            fix_md_str.append(md_split[i])
-        return '\n'.join(fix_md_str)
-
     def get(self, url, params=None, **kwargs):
         response = requests.get(url, params=params, **kwargs)
         encode_info = chardet.detect(response.content)
@@ -119,16 +109,45 @@ class ExtractorBlog:
         response_text = response.text
         html_filter = self.filterHtml(response_text)
         html_fix = self.fixUrl(url, html_filter)
-        # print(html_fix)
         readability = Readability(html_fix, url)
         self.title = readability.title
-        self.html = readability.content
+        self.body_html = readability.content
+        self.html = response_text
 
     def toMarkdown(self):
-        if self.html:
+        """
+        生成markdown
+        :return:
+        """
+        def fixMd(md):
+            # 去除图片生成md时产生重复地址
+            md_split = md.split('\n')
+            fix_md_str = []
+            for i in range(len(md_split)):
+                if i < len(md_split) - 2 and md_split[i] == md_split[i + 2] and md_split[i] \
+                        and '```' not in md_split[i]:
+                    continue
+                fix_md_str.append(md_split[i])
+            return '\n'.join(fix_md_str)
+
+        if self.body_html:
             md = tomd.Tomd(self.html).markdown
-            md = self.fixMd(md)
-            return md
+            self.body_md = fixMd(md)
+
+    def getKeys(self, n=5):
+        """
+        获取文章关键词
+        :param n: 关键词个数
+        :return keys:
+        """
+        pass
+
+    def getSummary(self):
+        """
+        自动获取摘要
+        :return:
+        """
+        pass
 
 
 if __name__ == '__main__':
