@@ -6,7 +6,7 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 __author__ = 'JacksonSun'
@@ -15,7 +15,7 @@ __date__ = '2019/03/11'
 
 setup(
     name='extractorblog',                                # 名称
-    version='0.0.6',                                 # 版本号
+    version='0.0.6.1',                                 # 版本号
     description='extractor blog',                          # 简单描述
     long_description=long_description,               # 详细描述
     classifiers=[
