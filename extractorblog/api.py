@@ -1,4 +1,4 @@
-from .main_extractor import extractor
+from .main import extractor
 
 
 def get(url, params=None, **kwargs):
