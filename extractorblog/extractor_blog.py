@@ -4,9 +4,9 @@ from posixpath import normpath
 import requests
 import re
 import chardet
-from readability import Readability
-import tomd
-from utils.textRank4Keywords import TextRank
+from .readability import Readability
+from . import tomd
+from .utils.textRank4Keywords import TextRank
 
 
 class ExtractorBlog:
