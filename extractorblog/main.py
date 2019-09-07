@@ -24,6 +24,9 @@ class extractor(ExtractorBlog):
     def getBodyHtml(self):
         return self.body_html
 
+    def getKeys(self, **kwargs):
+        return self.getKeyWords(**kwargs)
+
 
 if __name__ == '__main__':
     ua_headers = {
@@ -33,3 +36,4 @@ if __name__ == '__main__':
 
     print(ET.getHtml)
     print(ET.getMarkdown)
+    print(ET.getKeys(n=10))

@@ -71,9 +71,7 @@ class Readability:
             elem.extract()
 
     def grabArticle(self):
-
         for elem in self.html.findAll(True):
-
             unlikelyMatchString = ''.join(elem.get('id', [''])) + ''.join(elem.get('class', ['']))
 
             if self.regexps['unlikelyCandidates'].search(unlikelyMatchString) and \
@@ -81,7 +79,6 @@ class Readability:
                     elem.name != 'body':
                 elem.extract()
                 continue
-            #                pass
 
             if elem.name == 'div':
                 s = elem.renderContents().decode('utf-8')

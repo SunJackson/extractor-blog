@@ -16,3 +16,6 @@ print(blog.getBodyHtml)
 
 # 获取网页主体markdown内容
 print(blog.getMarkdown)
+
+# 获取关键词
+print(blog.getKeys(n=5))

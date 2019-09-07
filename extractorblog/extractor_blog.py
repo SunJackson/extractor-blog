@@ -6,6 +6,7 @@ import re
 import chardet
 from readability import Readability
 import tomd
+from utils.textRank4Keywords import TextRank
 
 
 class ExtractorBlog:
@@ -123,6 +124,7 @@ class ExtractorBlog:
         生成markdown
         :return:
         """
+
         def fixMd(md):
             # 去除图片生成md时产生重复地址
             md_split = md.split('\n')
@@ -138,20 +140,18 @@ class ExtractorBlog:
             md = tomd.Tomd(self.html).markdown
             self.body_md = fixMd(md)
 
-    def getKeys(self, n=5):
+    def getKeyWords(self, window=5, alpha=0.85, iternum=50, n=5):
         """
         获取文章关键词
-        :param n: 关键词个数
-        :return keys:
+        :param window: 窗口大小
+        :param alpha:
+        :param iternum: 迭代次数
+        :param n: 返回关键词个数
+        :return: keys
         """
-
-        import re
-        re_en_word = re.compile(r'([a-z]+)', re.I)
-        # \u4E00-\u9FFF是中文的范围
-        re_cn_word = re.compile(r'[\u4E00-\u9FFF]')
-        body_text = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+=\-—、~@#￥%…&*（）]+", " ", self.body_text)
-        print(len(re_en_word.findall(body_text)), len(re_cn_word.findall(body_text)))
-        pass
+        tr = TextRank(self.body_text, window, alpha, iternum)
+        keys = tr.getTopKeyWords(n)
+        return keys
 
     def getSummary(self):
         """
@@ -167,4 +167,4 @@ if __name__ == '__main__':
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0',
     }
     html_content = ET.get('https://www.jiqizhixin.com/articles/2019-03-20-4', headers=ua_headers)
-    print(ET.getKeys())
+    print(ET.getKeyWords())

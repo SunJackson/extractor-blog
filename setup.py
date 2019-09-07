@@ -15,7 +15,7 @@ __date__ = '2019/03/11'
 
 setup(
     name='extractorblog',                                # 名称
-    version='0.0.6.3',                                 # 版本号
+    version='0.0.6.5',                                 # 版本号
     description='extractor blog',                          # 简单描述
     # long_description=long_description,               # 详细描述
     # long_description_content_type='text/markdown',
