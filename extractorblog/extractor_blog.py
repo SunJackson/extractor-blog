@@ -4,8 +4,8 @@ from posixpath import normpath
 import requests
 import re
 import chardet
-from .readability import Readability
-from . import tomd
+from readability import Readability
+import tomd
 
 
 class ExtractorBlog:
@@ -14,6 +14,7 @@ class ExtractorBlog:
         self.title = None
         self.html = None
         self.body_md = None
+        self.body_text = None
 
     def filterHtml(self, html):
         filter_map = {
@@ -43,6 +44,7 @@ class ExtractorBlog:
         return htmlstr
 
     def filterTags(self, htmlstr):
+        re_doctype = re.compile('<!DOCTYPE.*?>')
         re_nav = re.compile('<nav.+</nav>')
         re_cdata = re.compile('//<!\[CDATA\[.*//\]\]>', re.DOTALL)
         re_script = re.compile(
@@ -56,6 +58,7 @@ class ExtractorBlog:
         re_comment = re.compile('<!--.*?-->', re.DOTALL)
         re_space = re.compile(' +')
         s = re_cdata.sub('', htmlstr)
+        s = re_doctype.sub('', s)
         s = re_nav.sub('', s)
         s = re_script.sub('', s)
         s = re_style.sub('', s)
@@ -113,6 +116,7 @@ class ExtractorBlog:
         self.title = readability.title
         self.body_html = readability.content
         self.html = response_text
+        self.body_text = self.filterTags(self.body_html)
 
     def toMarkdown(self):
         """
@@ -140,6 +144,13 @@ class ExtractorBlog:
         :param n: 关键词个数
         :return keys:
         """
+
+        import re
+        re_en_word = re.compile(r'([a-z]+)', re.I)
+        # \u4E00-\u9FFF是中文的范围
+        re_cn_word = re.compile(r'[\u4E00-\u9FFF]')
+        body_text = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+=\-—、~@#￥%…&*（）]+", " ", self.body_text)
+        print(len(re_en_word.findall(body_text)), len(re_cn_word.findall(body_text)))
         pass
 
     def getSummary(self):
@@ -155,4 +166,5 @@ if __name__ == '__main__':
     ua_headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0',
     }
-    html_content = ET.get('https://statmodeling.stat.columbia.edu/2018/08/01/thanks-nvidia/', headers=ua_headers)
+    html_content = ET.get('https://www.jiqizhixin.com/articles/2019-03-20-4', headers=ua_headers)
+    print(ET.getKeys())

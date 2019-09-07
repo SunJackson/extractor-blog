@@ -295,7 +295,6 @@ class Readability:
 
 if __name__ == '__main__':
     from Tomd import tomd
-
     url = "http://andrewgelman.com/2018/08/01/thanks-nvidia/"
     page = urllib.request.urlopen(url)
     html = page.read().decode('utf-8')

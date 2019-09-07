@@ -1,5 +1,5 @@
 
-文章提取
+# 文章提取
 
 1. 提取文章标题
 2. 提取文章内容
@@ -18,7 +18,7 @@ ua_headers = {
 }
 blog = extractorblog.get(url='https://statmodeling.stat.columbia.edu/2018/08/01/thanks-nvidia/', headers=ua_headers)
 
-# 获取网页内容
+# 获取网页html内容
 print(blog.getHtml)
 
 # 获取网页标题

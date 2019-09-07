@@ -6,3 +6,4 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 
 from .api import get
+from .api import extractor
