@@ -14,7 +14,7 @@ class Readability:
         'unlikelyCandidates': re.compile("combx|comment|community|disqus|extra|foot|header|menu|"
                                          "remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|"
                                          "pagination|pager|popup|tweet|twitter", re.I),
-        'okMaybeItsACandidate': re.compile("and|article|body|column|main|shadow", re.I),
+        'okMaybeItsACandidate': re.compile("and|article|body|column|main|shadow|content", re.I),
         'positive': re.compile("article|body|content|entry|hentry|main|page|pagination|post|text|"
                                "blog|story|alt", re.I),
         'negative': re.compile("combx|comment|com|contact|foot|footer|footnote|masthead|media|"
@@ -34,7 +34,7 @@ class Readability:
         'prevLink': re.compile("(prev|earl|old|new|<|«)", re.I)
     }
 
-    def __init__(self, input, url):
+    def __init__(self, input, url, article_tag=None):
         """
         url = "http://yanghao.org/blog/"
         htmlcode = urllib2.urlopen(url).read().decode('utf-8')
@@ -50,7 +50,6 @@ class Readability:
         self.input = self.regexps['replaceFonts'].sub("<\g<1>span>", self.input)
 
         self.html = BeautifulSoup(self.input, "html.parser")
-
         self.removeScript()
         self.removeStyle()
         self.removeLink()
@@ -107,7 +106,6 @@ class Readability:
                 self.candidates[grandParentHash]['score'] += contentScore / 2
 
         topCandidate = None
-
         for key in self.candidates:
             self.candidates[key]['score'] = self.candidates[key]['score'] * \
                                             (1 - self.getLinkDensity(self.candidates[key]['node']))
@@ -123,7 +121,6 @@ class Readability:
         return content
 
     def cleanArticle(self, content):
-
         self.cleanStyle(content)
         self.clean(content, 'h1')
         self.clean(content, 'object')
@@ -170,9 +167,7 @@ class Readability:
             del elem['style']
 
     def cleanConditionally(self, e, tag):
-
         tagsList = e.findAll(tag)
-
         for node in tagsList:
             weight = self.getClassWeight(node)
             hashNode = hash(str(node))
@@ -286,11 +281,11 @@ class Readability:
 
 
 if __name__ == '__main__':
-    from Tomd import tomd
-    url = "http://andrewgelman.com/2018/08/01/thanks-nvidia/"
+
+    url = "https://www.analyticsvidhya.com/blog/2020/11/how-to-handle-common-selenium-challenges-using-python/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+AnalyticsVidhya+%28Analytics+Vidhya%29"
     page = urllib.request.urlopen(url)
     html = page.read().decode('utf-8')
     readability = Readability(html, url)
     html = readability.content
-    mdTxt = tomd.Tomd(html).markdown
-    print(readability.title, mdTxt)
+    print(html)
+

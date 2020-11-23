@@ -3,10 +3,10 @@
 import requests
 import re
 import chardet
-from extractorblog.readability import Readability
-from extractorblog import tomd
-from extractorblog.utils.utils import filterTags, urlJoin
-from extractorblog.utils.textRank4Keywords import TextRank
+from readability import Readability
+import tomd
+from utils.utils import filterTags, urlJoin
+from utils.textRank4Keywords import TextRank
 
 
 def fixUrl(article_url, text):
@@ -66,7 +66,8 @@ class ExtractorBlog:
                         and '```' not in md_split[i]:
                     continue
                 fix_md_str.append(md_split[i])
-            return '\n'.join(fix_md_str)
+            md_str_all = '\n'.join(fix_md_str)
+            return md_str_all
 
         if self.body_html:
             md = tomd.Tomd(self.html).markdown
@@ -98,6 +99,6 @@ if __name__ == '__main__':
     ua_headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0',
     }
-    html_content = ET.get('https://ramiro.org/notebook/reddit-best-post-times/', headers=ua_headers)
+    html_content = ET.get('https://www.analyticsvidhya.com/blog/2020/11/how-to-handle-common-selenium-challenges-using-python/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+AnalyticsVidhya+%28Analytics+Vidhya%29', headers=ua_headers)
     ET.toMarkdown()
     print(ET.body_md)

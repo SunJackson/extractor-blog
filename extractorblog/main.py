@@ -1,4 +1,4 @@
-from .extractor_blog import ExtractorBlog
+from extractor_blog import ExtractorBlog
 
 
 class extractor(ExtractorBlog):

@@ -93,3 +93,12 @@ def filterTags(html_str):
     s = replaceCharEntity(s)
     return s
 
+
+def getNetloc(url):
+    """
+    获取netloc
+    :param url:
+    :return:  netloc
+    """
+    netloc = urlparse(url).netloc
+    return netloc or None
