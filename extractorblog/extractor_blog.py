@@ -3,10 +3,10 @@
 import requests
 import re
 import chardet
-from readability import Readability
+from .readability import Readability
 import tomd
-from utils.utils import filterTags, urlJoin
-from utils.textRank4Keywords import TextRank
+from .utils.utils import filterTags, urlJoin
+from .utils.textRank4Keywords import TextRank
 
 
 def fixUrl(article_url, text):

@@ -3,7 +3,7 @@
 import re
 import os
 import warnings
-from utils.utils import filterTags
+from .utils.utils import filterTags
 
 MARKDOWN = {
     'h1': ('\n# ', '\n'),
