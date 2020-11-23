@@ -11,6 +11,7 @@ BASEDIR = path.abspath(path.dirname(__file__))
 
 class TextRank(object):
     def __init__(self, sentence, window, alpha, iternum):
+        self.word_list = None
         self.sentence = sentence
         self.window = window
         self.alpha = alpha
@@ -90,6 +91,6 @@ class TextRank(object):
 
 if __name__ == '__main__':
     s = '程序员(英文Programmer)是从事程序开发、维护的专业人员。一般将程序员分为程序设计人员和程序编码人员，但两者的界限并不非常清楚，特别是在中国。软件从业人员分为初级程序员、高级程序员、系统分析员和项目经理四大类。'
-    tr = TextRank(s, 5, 0.8, 50)
+    tr = TextRank(s, 5, 0.9, 50)
     keys = tr.getTopKeyWords(5)
     print(keys)

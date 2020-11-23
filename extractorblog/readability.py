@@ -73,13 +73,11 @@ class Readability:
     def grabArticle(self):
         for elem in self.html.findAll(True):
             unlikelyMatchString = ''.join(elem.get('id', [''])) + ''.join(elem.get('class', ['']))
-
             if self.regexps['unlikelyCandidates'].search(unlikelyMatchString) and \
                     not self.regexps['okMaybeItsACandidate'].search(unlikelyMatchString) and \
                     elem.name != 'body':
                 elem.extract()
                 continue
-
             if elem.name == 'div':
                 s = elem.renderContents().decode('utf-8')
                 if not self.regexps['divToPElements'].search(s):
@@ -88,10 +86,8 @@ class Readability:
             parentNode = node.parent
             grandParentNode = parentNode.parent
             innerText = node.text
-
             if not parentNode or len(innerText) < 20:
                 continue
-
             parentHash = hash(str(parentNode))
             grandParentHash = hash(str(grandParentNode))
 
@@ -100,7 +96,6 @@ class Readability:
 
             if grandParentNode and grandParentHash not in self.candidates:
                 self.candidates[grandParentHash] = self.initializeNode(grandParentNode)
-
             contentScore = 1
             contentScore += innerText.count(',')
             contentScore += innerText.count(u'，')
